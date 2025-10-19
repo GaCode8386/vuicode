@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💐 Gửi Thư Ngày 20/10 💕</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: url("hinhnen.jpg") no-repeat center center fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: "Comic Sans MS", "Poppins", sans-serif;
+    color: #ff5c8a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 40px 20px;
+  }
+
+  .container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4vw;
+    max-width: 900px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  #message {
+    font-size: 1.5vw;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    width: 50%;
+    min-width: 280px;
+    text-align: left;
+    display: none;
+    word-wrap: break-word;
+  }
+
+  .photo {
+    width: 20vw;
+    max-width: 220px;
+    min-width: 130px;
+    border-radius: 16px;
+    box-shadow: 0 0 15px rgba(255, 160, 180, 0.5);
+    display: none;
+    opacity: 0;
+    transform: translateX(40px) scale(0.9);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+
+  .photo.show {
+    display: block;
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  #startBtn {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px 26px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ff9eb5, #ffc1d6);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ffc6d0;
+    transition: transform 0.2s, box-shadow 0.3s;
+    z-index: 10;
+  }
+
+  #startBtn:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 30px #ff9eb5;
+  }
+
+  .emoji {
+    position: fixed;
+    bottom: 0;
+    font-size: 22px;
+    animation: floatUp 5s linear forwards;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+  }
+
+  audio { display: none; }
+
+
+  @media (max-width: 768px) {
+    body {
+      padding-top: 80px;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .container {
+      flex-direction: column;
+      gap: 3vh;
+      align-items: center;
+    }
+
+    #message {
+      width: 90%;
+      font-size: 4vw;
+      text-align: center;
+    }
+
+    .photo {
+      width: 65vw;
+    }
+  }
+</style>
+</head>
+
+
+<footer class="floating-footer">
+  © 2025 Bản quyền thuộc về <span>VươngIT</span> 💖
+</footer>
+
+<style>
+  .floating-footer {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff6fa5;
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    opacity: 0.8;
+    animation: fadePulse 2s ease-in-out infinite alternate;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1000; 
+  }
+
+  .floating-footer span {
+    font-weight: bold;
+    color: #ff3e7f;
+  }
+
+  @keyframes fadePulse {
+    0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+  }
+</style>
+
+
+<body>
+
+  <button id="startBtn">🌸 Nhấn Vô Đây Nè 🌸</button>
+
+  <div class="container">
+    <div id="message"></div>
+    <div>
+      <img id="photo1" class="photo" src="anh01.jpg" alt="Lâm Thị Thư 💕">
+      <img id="photo2" class="photo" src="anh02.jpg" alt="Thư xinh đẹp 💕">
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="landaugapgo.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+const lines = [
+  "Hi Hi 💌",
+  "Lâm Thị Thư",
+  "",
+  "Hôm nay là ngày 20 tháng 10...",
+  "Ngày của những bông hoa,",
+  "Ngày của những nụ cười xinh🌷",
+  "",
+  "Mình không có hoa hồng, cũng chẳng có quà xa xỉ,",
+  "Chỉ có vài dòng chữ nhỏ gửi đến bạn thuii🥰.",
+  "Gửi Thư chút lạc quan,",
+  "Không chờ ngày lấy lại,",
+  "Dù ngày mai ngang trái,",
+  "Mong Thư ít thở dài🥰",
+  "Chúc Thư luôn vui vẻ, luôn xinh đẹp,",
+  "Cười thật nhiều và hãy yêu thương bản thân mình nhiều hơn nha💕"
+];
+
+const msg = document.getElementById("message");
+const btn = document.getElementById("startBtn");
+const music = document.getElementById("bgMusic");
+const photo1 = document.getElementById("photo1");
+const photo2 = document.getElementById("photo2");
+
+let line = 0, char = 0;
+
+btn.addEventListener("click", () => {
+  btn.style.display = "none";
+  msg.style.display = "block";
+  music.play();
+  type();
+  setInterval(createEmoji, 500);
+});
+
+function type() {
+  if (line < lines.length) {
+    if (char < lines[line].length) {
+      msg.innerHTML += lines[line][char];
+      char++;
+      setTimeout(type, 60);
+    } else {
+      msg.innerHTML += "\n";
+      char = 0;
+      line++;
+      setTimeout(type, 300);
+    }
+  } else {
+    showPhotos();
+  }
+}
+
+function showPhotos() {
+  photo1.style.display = "block";
+  photo1.style.opacity = "1";
+  setTimeout(() => {
+    photo2.style.display = "block";
+    photo2.style.opacity = "1";
+  }, 2000);
+}
+
+const emojis = ["💖","🌸","✨","💐","🩷","🌷","💕","🌼"];
+function createEmoji() {
+  const e = document.createElement("div");
+  e.className = "emoji";
+  e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  e.style.left = Math.random() * 100 + "vw";
+  e.style.fontSize = Math.random() * 20 + 15 + "px";
+  e.style.animationDuration = (Math.random() * 3 + 3) + "s";
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 5000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+/* ============== LOGIN PAGE ============== */
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff0c0, #ffdede);
+  font-family: "Times New Roman", serif; /* ✅ Font toàn trang */
+  transition: background 2s ease;
+  position: relative;
+}
+
+body.show-flower {
+  background: radial-gradient(circle, #fff6f6, #ffb6c1);
+}
+
+.card {
+  z-index: 10;
+  background: white;
+  border: 2px solid #ad8c89;
+  border-radius: 20px;
+  width: 260px;
+  text-align: center;
+  padding: 16px;
+  box-shadow: 0 6px 12px rgba(167, 242, 247, 0.15);
+  transition: opacity 1s ease;
+}
+
+.input-box {
+  margin-top: 12px;
+  text-align: left;
+  position: relative;
+}
+
+.input-box label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: "Times New Roman", serif;
+}
+
+.input-box input {
+  width: 90%;
+  padding: 10px;
+  border: 2px solid #fab4ae;
+  border-radius: 8px;
+  transition: 0.2s;
+  font-family: "Times New Roman", serif;
+}
+
+.input-box input:focus {
+  border-color: #ff4b4b;
+  box-shadow: 0 0 5px rgba(255,107,107,0.5);
+}
+
+.icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 16px;
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+  font-family: "Times New Roman", serif;
+}
+
+.btn:hover {
+  background: #ff4b4b;
+  transform: scale(1.03);
+}
+
+.music-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #ff6f61;
+  border: none;
+  border-radius: 50%;
+  width: 40px; 
+  height: 40px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.copyright {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  font-weight: 600;
+  font-family: "Times New Roman", serif; /* ✅ Font bản quyền */
+  animation: glow 3s ease-in-out infinite alternate;
+  z-index: 100;
+}
+
+@keyframes glow {
+  from { color: #76eb77; text-shadow: 0 0 5px #fff; }
+  to { color: #ff4b4b; text-shadow: 0 0 10px #f9a7a7; }
+}
+
+/* ============== BIRTHDAY PAGE ============== */
+#birthdayContainer {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: black;
+  z-index: 5;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.5s ease;
+}
+
+#birthdayContainer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#birthdayContainer canvas {
+  position: absolute;
+  top: 0; left: 0;
+  display: block;
+}
+
+#matrix { z-index: 0; }
+#icons { z-index: 1; pointer-events: none; }
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff66cc;
+  text-align: center;
+  text-shadow: 0 0 20px #ff99cc, 0 0 40px #ff33aa, 0 0 80px #ff0080;
+  opacity: 0;
+  transition: opacity 1s ease;
+  z-index: 3;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 90%;
+  font-family: "Times New Roman", serif; /* ✅ Font sinh nhật */
+}
+
+.show { opacity: 1; }
+
+#countdown { font-size: clamp(50px, 15vw, 100px); }
+#happy { font-size: clamp(26px, 8vw, 40px); color: #ff99cc; }
+#name { font-size: clamp(28px, 8vw, 50px); color: #ffccff; }
+#date { font-size: clamp(22px, 6vw, 40px); color: #ffd6f9; }
+#wish {
+  font-size: clamp(18px, 5vw, 35px);
+  color: #ffe6ff;
+  width: 85%;
+  max-width: 900px;
+  line-height: 1.5;
+  background: linear-gradient(90deg, #ff80ff, #ff99cc);
+  border-radius: 20px;
+  padding: 15px 20px;
+  box-sizing: border-box;
+  text-shadow: 0 0 15px rgba(255, 200, 255, 0.9);
+  box-shadow: 0 0 25px rgba(255, 150, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#wish.caret::after {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 1em;
+  background: #fff;
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (max-width: 480px) {
+  #wish { width: 95%; padding: 10px 15px; line-height: 1.4; }
+}
+#wish {
+  white-space: pre-line; /* ✅ Giữ xuống dòng */
+  text-align: center;    /* ✅ Căn giữa chữ */
+}
+/* ✅ Giới hạn khung lời chúc, cho phép cuộn nếu nội dung dài */
+#wish {
+  max-height: 50vh;        /* Chiều cao tối đa chiếm 60% màn hình */
+  max-width: 50vw;
+  overflow-y: auto;         /* Hiển thị thanh cuộn dọc khi cần */
+  scrollbar-width: thin;    /* Thanh cuộn mảnh (Firefox) */
+  scrollbar-color: #ff99cc transparent; /* Màu thanh cuộn */
+}
+
+/* ✅ Tùy chỉnh thanh cuộn cho Chrome, Edge, Safari */
+#wish::-webkit-scrollbar {
+  width: 6px;
+}
+#wish::-webkit-scrollbar-thumb {
+  background: #ff99cc;
+  border-radius: 10px;
+}
+#wish::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Nút nhạc -->
+<button class="music-toggle" id="musicBtn">🔇</button>
+
+<!-- Form đăng nhập -->
+<div class="card" id="loginCard">
+  <img src="gau1.jpg" alt="cute bear" style="width:100%;border-radius:10px;">
+
+  <div class="input-box">
+    <label for="fullname">Họ và tên</label>
+    <input type="text" id="fullname" placeholder="Họ & Tên">
+  </div>
+
+  <div class="input-box">
+    <label for="password">Mật khẩu</label>
+    <input type="password" id="password" placeholder="01/01/2025">
+    <span class="icon" id="togglePwd">👁️</span>
+  </div>
+
+  <button class="btn" id="enterBtn">ENTER</button>
+</div>
+
+<!-- Nhạc -->
+<audio id="birthdaySong" loop>
+  <source src="happybrth.mp3" type="audio/mpeg">
+</audio>
+<audio id="clickSound">
+  <source src="landaugapg0o.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Bản quyền -->
+<div class="copyright">© 2025 Bản quyền thuộc về VươngIT </div>
+
+<!-- BIRTHDAY PAGE -->
+<div id="birthdayContainer">
+  <canvas id="matrix"></canvas>
+  <canvas id="icons"></canvas>
+
+  <div id="countdown" class="text"></div>
+  <div id="happy" class="text">🎂 HAPPY BIRTHDAY 🎂</div>
+  <div id="name" class="text">Lâm Thị Thư 🎂</div>
+  <div id="date" class="text">01 / 11 / 2005</div>
+  <div id="wish" class="text"></div>
+</div>
+
+<script>
+// ============== LOGIN SCRIPT ==============
+const btn = document.getElementById("enterBtn");
+const fullnameInput = document.getElementById("fullname");
+const passwordInput = document.getElementById("password");
+const togglePwd = document.getElementById("togglePwd");
+const musicBtn = document.getElementById("musicBtn");
+const music = document.getElementById("birthdaySong");
+const clickSound = document.getElementById("clickSound");
+const card = document.getElementById("loginCard");
+const birthdayContainer = document.getElementById("birthdayContainer");
+
+let isPlaying = false;
+
+//  Thông tin đăng nhập
+const correctName = "Tạ Văn Vương";
+const correctPassword = "1";
+
+// Ẩn/hiện mật khẩu
+togglePwd.addEventListener("click", () => {
+  const type = passwordInput.type === "password" ? "text" : "password";
+  passwordInput.type = type;
+  togglePwd.textContent = type === "text" ? "🙈" : "👁️";
+});
+
+// Nhấn Enter
+document.addEventListener("keypress", e => { if (e.key === "Enter") btn.click(); });
+
+// Kiểm tra đăng nhập
+btn.addEventListener("click", () => {
+  clickSound.currentTime = 0;
+  clickSound.play().catch(() => {});
+
+  const name = formatName(fullnameInput.value);
+  const password = passwordInput.value.trim();
+
+  if (!name || !password) {
+    Swal.fire("Thiếu thông tin rồi😅", "Vui lòng nhập đầy đủ!", "warning");
+    return;
+  }
+
+  if (name !== correctName) {
+    Swal.fire("Sai tên rồi 😅", "Thử lại nhé!", "error");
+    return;
+  }
+
+  if (password !== correctPassword) {
+    Swal.fire("Sai mật khẩu 😝", "", "error");
+    return;
+  }
+
+  Swal.fire({
+    title: "Đăng nhập thành công 🎉",
+    text: "Chúc bạn một ngày mới an lành 💖",
+    icon: "success",
+    showConfirmButton: false,
+    timer: 2200
+  });
+
+  setTimeout(() => {
+    playMusic();
+    showBackground();
+    setTimeout(startBirthdayEffect, 1500);
+  }, 2500);
+});
+
+// Phát nhạc
+function playMusic() {
+  if (!isPlaying) {
+    music.play().catch(() => {});
+    isPlaying = true;
+    musicBtn.textContent = "🔊";
+  }
+}
+
+// Đổi nền + ẩn form
+function showBackground() {
+  document.body.classList.add("show-flower");
+  card.style.opacity = "0";
+  setTimeout(() => { card.style.display = "none"; }, 1000);
+}
+
+// Bật/tắt nhạc
+musicBtn.addEventListener("click", () => {
+  if (isPlaying) {
+    music.pause();
+    musicBtn.textContent = "🔇";
+  } else {
+    music.play().catch(() => {});
+    musicBtn.textContent = "🔊";
+  }
+  isPlaying = !isPlaying;
+});
+
+// Chuẩn hóa tên
+function formatName(str) {
+  return str.toLowerCase().trim().split(" ").filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+// ============== BIRTHDAY EFFECT SCRIPT ==============
+function startBirthdayEffect() {
+  birthdayContainer.classList.add("active");
+
+  const matrixCanvas = document.getElementById("matrix");
+  const mctx = matrixCanvas.getContext("2d");
+  const iconsCanvas = document.getElementById("icons");
+  const ictx = iconsCanvas.getContext("2d");
+
+  function resizeCanvas() {
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    iconsCanvas.width = window.innerWidth;
+    iconsCanvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()";
+  const fontSize = 16;
+  let columns = Math.floor(matrixCanvas.width / fontSize);
+  let drops = Array(columns).fill(1);
+
+  function drawMatrix() {
+    mctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    mctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    mctx.fillStyle = "#ff66cc";
+    mctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      mctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i] += 0.25;
+    }
+    requestAnimationFrame(drawMatrix);
+  }
+  drawMatrix();
+
+  const icons = ["🍰", "🎉","🎁","❄️", "💖","💐", "✨", "🧸","🌸","🌷", "🎇", "💫"];
+  const numIcons = 25;
+  let iconArray = [];
+
+  function initIcons() {
+    iconArray = [];
+    for (let i = 0; i < numIcons; i++) {
+      iconArray.push({
+        x: Math.random() * iconsCanvas.width,
+        y: Math.random() * iconsCanvas.height,
+        size: Math.random() * 30 + 20,
+        speed: Math.random() * 1.2 + 0.5,
+        icon: icons[Math.floor(Math.random() * icons.length)],
+        opacity: Math.random() * 0.7 + 0.3
+      });
+    }
+  }
+
+  function drawIcons() {
+    ictx.clearRect(0, 0, iconsCanvas.width, iconsCanvas.height);
+    iconArray.forEach(ic => {
+      ictx.globalAlpha = ic.opacity;
+      ictx.font = ic.size + "px serif";
+      ictx.fillText(ic.icon, ic.x, ic.y);
+      ic.y += ic.speed;
+      if (ic.y > iconsCanvas.height + 40) {
+        ic.y = -40;
+        ic.x = Math.random() * iconsCanvas.width;
+        ic.icon = icons[Math.floor(Math.random() * icons.length)];
+      }
+    });
+    ictx.globalAlpha = 1;
+    requestAnimationFrame(drawIcons);
+  }
+  initIcons();
+  drawIcons();
+
+  const countdown = document.getElementById("countdown");
+  const happy = document.getElementById("happy");
+  const name = document.getElementById("name");
+  const date = document.getElementById("date");
+  const wish = document.getElementById("wish");
+
+  function show(el) { el.classList.add("show"); }
+
+  setTimeout(() => {
+    let count = 3;
+    countdown.textContent = count;
+    show(countdown);
+
+    const interval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        countdown.textContent = count;
+      } else {
+        countdown.classList.remove("show");
+        clearInterval(interval);
+
+        setTimeout(() => show(happy), 2000);
+        setTimeout(() => happy.classList.remove("show"), 5000);
+        setTimeout(() => show(name), 6500);
+        setTimeout(() => name.classList.remove("show"), 9500);
+        setTimeout(() => show(date), 11000);
+        setTimeout(() => date.classList.remove("show"), 13500);
+
+setTimeout(() => {
+  show(wish);
+  wish.classList.add("caret");
+
+  const lines = [
+    "💌",
+    "Đường dài vững trãi,",
+    "Trái tim dịu dàng,",
+    "Tháng ngày bình an!",
+    "Chúc mừng sinh nhật Bạn tôi🎉",
+    "🎨 Cuộc sống như một bức tranh ngày càng mở rộng, mỗi năm là một nét vẽ mới,bạn hãy vẽ thêm nét thật đậm cho hạnh phúc, tô thêm màu sắc rực rỡ cho tình yêu và hãy cố gắng hết mình để biến bức tranh này thành một kiệt tác nhé💖.",
+    "💌 Chúc bạn luôn xinh đẹp, vui vẻ, sức khỏe và nhiều tiền💵🌸✨🌷"
+    
+  ];
+
+  let lineIndex = 0;
+  let charIndex = 0;
+  wish.textContent = "";
+
+  function typeLine() {
+    if (lineIndex < lines.length) {
+      const line = lines[lineIndex];
+      if (charIndex < line.length) {
+        wish.textContent += line.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeLine, 50);
+      } else {
+        wish.textContent += "\n"; // ✅ xuống dòng sau mỗi câu
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeLine, 500); // dừng giữa các dòng
+      }
+    } else {
+      wish.classList.remove("caret");
+    }
+  }
+
+  typeLine();
+}, 15500);
+
+
+      }
+    }, 3000);
+  }, 4000); //thời gian delay
+}
+</script>
+</body>
+</html>
